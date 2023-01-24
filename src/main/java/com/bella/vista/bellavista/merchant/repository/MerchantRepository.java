@@ -8,6 +8,9 @@ import java.util.Optional;
 
 public interface MerchantRepository extends ElasticsearchRepository<Merchant,String> {
 
+
+
+
     @Query("""
             {
                  "term": {
