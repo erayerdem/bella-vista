@@ -12,12 +12,11 @@ import lombok.Setter;
 @Setter
 @JsonIgnoreProperties
 public class BaseResponse<T> {
-    private T data;
+
 
     @Builder.Default
     private OperationResult result = OperationResult.SUCCESS;
-
-
+    private T data;
 
     @Getter
     @Setter

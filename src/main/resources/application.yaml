@@ -1,0 +1,10 @@
+springdoc:
+  api-docs:
+    enabled: true
+    path: /open-api
+    groups:
+      enabled: true
+  swagger-ui:
+    path: /documentation
+
+

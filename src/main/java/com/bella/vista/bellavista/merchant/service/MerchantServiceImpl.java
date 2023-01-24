@@ -24,7 +24,6 @@ public class MerchantServiceImpl implements MerchantService{
     @Override
     public List<MerchantDto> getMerchants() {
         var merchants = merchantRepository.findAll();
-        merchants.forEach(ex -> System.out.println(ex.getId() + ex.getName()));
         return  StreamSupport
                 .stream(merchants.spliterator(), true)
                 .map(mapper::toDto).collect(Collectors.toList());
