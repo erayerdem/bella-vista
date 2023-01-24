@@ -7,4 +7,6 @@ springdoc:
   swagger-ui:
     path: /documentation
 
-
+spring:
+  jackson:
+    default-property-inclusion: non_null
