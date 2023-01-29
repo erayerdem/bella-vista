@@ -50,4 +50,6 @@ public class CoffeeController {
         merchantService.deleteByMerchantAndCoffeeName(merchantId,coffeeName);
         return BaseResponse.success();
     }
+
+
 }

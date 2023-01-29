@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import Env from "./config/Env";
 
 function App() {
   return (
@@ -7,7 +8,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Edit <code>{Env.port}</code> and save to reload.
         </p>
         <a
           className="App-link"
