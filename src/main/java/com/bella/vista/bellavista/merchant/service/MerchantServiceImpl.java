@@ -1,6 +1,6 @@
 package com.bella.vista.bellavista.merchant.service;
 
-import com.bella.vista.bellavista.coffee.dto.Coffee;
+import com.bella.vista.bellavista.coffee.entity.Coffee;
 import com.bella.vista.bellavista.merchant.dto.MerchantCreateRequestDto;
 import com.bella.vista.bellavista.merchant.dto.MerchantDto;
 import com.bella.vista.bellavista.merchant.entity.Merchant;
@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -33,14 +34,16 @@ public class MerchantServiceImpl implements MerchantService{
                 .map(mapper::toDto).collect(Collectors.toList());
     }
 
-    @Override
-    public Optional<Merchant> getMerchantByName(String name) {
-        return merchantRepository.getByNameKeyword(name);
-    }
 
     @Override
-    public void saveMerchant(MerchantCreateRequestDto merchant,String merchantName) {
-        merchantRepository.save(
+    public Optional<Merchant> getByİd(Long id) {
+        return merchantRepository.findById(id);
+    }
+
+
+    @Override
+    public Merchant saveMerchant(MerchantCreateRequestDto merchant,String merchantName) {
+        return merchantRepository.save(
                 Merchant.builder()
                         .name(merchantName)
                         .city(merchant.city())
@@ -57,21 +60,11 @@ public class MerchantServiceImpl implements MerchantService{
                 .filter(Objects::nonNull)
                 .flatMap(Collection::stream).toList();
     }
-
     @Override
-    public Optional<Merchant> getById(String merchantId) {
-        return merchantRepository.findById(merchantId);
+    public Merchant getById(Long merchantId) {
+        return merchantRepository.findById(merchantId).orElseThrow(() -> new RuntimeException("Merchant Not Found"));
     }
 
-
-    public Merchant getMerchant(String merchantId) {
-        Optional<Merchant> byId = getById(merchantId);
-        if (byId.isPresent()) {
-            return byId.get();
-        }
-        throw  new RuntimeException("Merchant not found");
-
-    }
 
     @Override
     public void saveCoffee(List<Coffee> coffee, Merchant merchant) {
@@ -79,20 +72,22 @@ public class MerchantServiceImpl implements MerchantService{
         merchantRepository.save(merchant);
     }
 
+
     @Override
-    public List<Coffee> getCoffeesOfMerchant(String merchantId) {
-        return getMerchant(merchantId).getCoffees();
+    public Set<Coffee> getCoffeesOfMerchant(Long merchantId) {
+        return getById(merchantId).getCoffees();
 
     }
 
     @Override
-    public void deleteByMerchantAndCoffeeName(String merchantId, String coffeeName) {
-        Merchant merchant = getMerchant(merchantId);
-        Optional<Coffee> first = merchant.getCoffees().stream().filter(coffee -> coffee.getFullName().equals(coffeeName)).findFirst();
-        if (first.isPresent()) {
-            merchant.getCoffees().remove(first.get());
-            merchantRepository.save(merchant);
-        }
-
+    public Optional<Merchant> findByName(String name) {
+        return merchantRepository.findByNameIgnoreCase(name);
     }
+
+    @Override
+    public void deleteMerchantById(Long id) {
+        var merchant = getById(id);
+        merchantRepository.delete(merchant);
+    }
+
 }

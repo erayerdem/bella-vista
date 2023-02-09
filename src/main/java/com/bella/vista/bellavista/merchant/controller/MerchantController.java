@@ -5,13 +5,16 @@ import com.bella.vista.bellavista.common.dto.BaseResponse;
 import com.bella.vista.bellavista.merchant.dto.MerchantCreateRequestDto;
 import com.bella.vista.bellavista.merchant.dto.MerchantDto;
 import com.bella.vista.bellavista.merchant.entity.Merchant;
+import com.bella.vista.bellavista.merchant.mapper.MerchantMapper;
 import com.bella.vista.bellavista.merchant.service.MerchantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +29,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class MerchantController {
+    private final MerchantMapper merchantMapper;
 
     private final MerchantService merchantService;
 
@@ -37,13 +41,25 @@ public class MerchantController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BaseResponse<Void> insertMerchant(@RequestBody MerchantCreateRequestDto merchant ){
-        String capitalize = WordUtils.capitalize(StringUtils.normalizeSpace(merchant.merchantName()));
-        Optional<Merchant> merchantByName = merchantService.getMerchantByName(capitalize);
+    public BaseResponse<MerchantDto> insertMerchant(@RequestBody MerchantCreateRequestDto req ){
+        String capitalize = WordUtils.capitalize(StringUtils.normalizeSpace(req.merchantName()));
+        Optional<Merchant> merchantByName = merchantService.findByName(capitalize);
         if (merchantByName.isEmpty()) {
-            merchantService.saveMerchant(merchant,capitalize);
-            return BaseResponse.success();
+            var merchant = merchantService.saveMerchant(req, capitalize);
+            return BaseResponse.<MerchantDto>builder().data(merchantMapper.toDto(merchant)).build();
         }
         throw new RuntimeException("Merchant Already Exist");
+    }
+
+    @GetMapping("/{id}")
+    public BaseResponse<MerchantDto> getMerchant(@PathVariable Long id){
+        var  merchant = merchantMapper.toDto(merchantService.getById(id));
+        return BaseResponse.<MerchantDto>builder().data(merchant).build();
+    }
+
+    @DeleteMapping("/{id}")
+    public BaseResponse<Void> deleteMerchant(@PathVariable Long id){
+        merchantService.deleteMerchantById(id);
+        return BaseResponse.success();
     }
 }

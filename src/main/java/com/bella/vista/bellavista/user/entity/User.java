@@ -1,38 +1,36 @@
 package com.bella.vista.bellavista.user.entity;
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 
 
-import java.util.List;
-
-
-@Document(indexName = "merchant")
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
+@Table(name = "member")
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "user_sequence")
     private String id;
-    @Field(type = FieldType.Keyword)
+
     private String name;
 
-    @Field(type = FieldType.Text)
     private String  email;
 
-    @Field(type = FieldType.Keyword)
     private String about;
 
-    private List<String > comments;
+    //private List<String > comments;
 }

@@ -1,30 +1,32 @@
 package com.bella.vista.bellavista.merchant.service;
 
-import com.bella.vista.bellavista.coffee.dto.Coffee;
+import com.bella.vista.bellavista.coffee.entity.Coffee;
 import com.bella.vista.bellavista.merchant.dto.MerchantCreateRequestDto;
 import com.bella.vista.bellavista.merchant.dto.MerchantDto;
 import com.bella.vista.bellavista.merchant.entity.Merchant;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface MerchantService {
 
     List<MerchantDto> getMerchants();
 
-    Optional<Merchant> getMerchantByName(String name);
 
-    void saveMerchant(MerchantCreateRequestDto merchant,String merchantName);
+    Optional<Merchant> getByİd(Long id);
+
+    Merchant saveMerchant(MerchantCreateRequestDto merchant, String merchantName);
 
     List <Coffee> getCoffees();
 
-    Optional<Merchant> getById(String merchantId);
+    Merchant getById(Long merchantId);
 
     void saveCoffee(List<Coffee> coffee, Merchant merchantId);
 
-    List<Coffee> getCoffeesOfMerchant(String merchantId);
+    Set<Coffee> getCoffeesOfMerchant(Long merchantId);
 
-    void deleteByMerchantAndCoffeeName(String merchantId, String coffeeName);
+    Optional<Merchant> findByName(String name);
 
-    Merchant getMerchant(String merchantId);
+    void deleteMerchantById(Long id);
 }

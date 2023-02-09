@@ -1,3 +1,10 @@
-logging:
-  level:
-    root: trace
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5454/postgres
+    username: postgres
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true

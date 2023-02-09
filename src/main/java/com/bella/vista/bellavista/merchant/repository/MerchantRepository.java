@@ -1,24 +1,11 @@
 package com.bella.vista.bellavista.merchant.repository;
 
 import com.bella.vista.bellavista.merchant.entity.Merchant;
-import org.springframework.data.elasticsearch.annotations.Query;
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.springframework.data.repository.ListCrudRepository;
 
 import java.util.Optional;
 
-public interface MerchantRepository extends ElasticsearchRepository<Merchant,String> {
+public interface MerchantRepository extends ListCrudRepository<Merchant,Long> {
 
-
-
-
-    @Query("""
-            {
-                 "term": {
-                  "name": {
-                    "value": "?0"
-                  }
-                }
-              }
-            """)
-    Optional<Merchant> getByNameKeyword(String name);
+    Optional<Merchant>findByNameIgnoreCase(String name);
 }

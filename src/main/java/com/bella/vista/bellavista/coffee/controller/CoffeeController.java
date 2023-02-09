@@ -1,10 +1,11 @@
 package com.bella.vista.bellavista.coffee.controller;
 
 
-import com.bella.vista.bellavista.coffee.dto.Coffee;
+import com.bella.vista.bellavista.coffee.dto.CoffeeDto;
+import com.bella.vista.bellavista.coffee.entity.Coffee;
+import com.bella.vista.bellavista.coffee.mapper.CoffeeMapper;
+import com.bella.vista.bellavista.coffee.service.CoffeeService;
 import com.bella.vista.bellavista.common.dto.BaseResponse;
-import com.bella.vista.bellavista.merchant.entity.Merchant;
-import com.bella.vista.bellavista.merchant.service.MerchantService;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("coffees")
@@ -25,29 +28,30 @@ import java.util.List;
 @Slf4j
 public class CoffeeController {
 
-    private final MerchantService merchantService;
+    private final CoffeeService coffeeService;
 
+    private final CoffeeMapper coffeeMapper;
 
     @GetMapping
     public BaseResponse<List<Coffee>> getCoffees(){
-         return BaseResponse.<List<Coffee>>builder().data(merchantService.getCoffees()).build();
+         return BaseResponse.<List<Coffee>>builder().data(coffeeService.getCoffees()).build();
     }
 
-    @GetMapping("merchants/{merchantId}")
-    public BaseResponse<List<Coffee>> getCoffeesOfMerchant(@NotBlank @PathVariable String merchantId){
-        return BaseResponse.<List<Coffee>>builder().data(merchantService.getCoffeesOfMerchant(merchantId)).build();
+    @GetMapping("/merchants/{merchantId}")
+    public BaseResponse<Set<Coffee>> getCoffeesOfMerchant(@NotBlank @PathVariable Long merchantId){
+        return BaseResponse.<Set<Coffee>>builder().data(coffeeService.getCoffeesOfMerchant(merchantId)).build();
     }
 
-    @PostMapping("merchants/{merchantId}")
-    public BaseResponse<Void> setCoffee(@NotBlank @PathVariable String merchantId, @NotEmpty @RequestBody List<Coffee> coffees)  {
-        Merchant merchant = merchantService.getMerchant(merchantId);
-        merchantService.saveCoffee(coffees,merchant);
+    @PostMapping("/merchants/{merchantId}")
+    public BaseResponse<Void> setCoffee(@NotBlank @PathVariable Long merchantId, @NotEmpty @RequestBody List<CoffeeDto> coffees)  {
+        Set<Coffee> collect = coffees.stream().map(coffeeMapper::toEntity).collect(Collectors.toSet());
+        coffeeService.saveCoffee(collect,merchantId);
         return BaseResponse.success();
     }
 
-    @DeleteMapping("{coffeeName}/merchants/{merchantId}")
-    public BaseResponse<Void> deleteCoffee(@NotBlank @PathVariable String merchantId ,@NotBlank  @PathVariable String coffeeName){
-        merchantService.deleteByMerchantAndCoffeeName(merchantId,coffeeName);
+    @DeleteMapping("/{id}")
+    public BaseResponse<Void> deleteCoffee(@NotBlank @PathVariable Long id ){
+        coffeeService.deleteById(id);
         return BaseResponse.success();
     }
 
