@@ -1,8 +1,6 @@
 package com.bella.vista.bellavista.merchant.dto;
 
 import com.bella.vista.bellavista.common.dto.City;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
