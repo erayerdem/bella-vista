@@ -1,6 +1,7 @@
 package com.bella.vista.bellavista.user.entity;
 
 
+import com.bella.vista.bellavista.common.entity.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +21,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @Table(name = "member")
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

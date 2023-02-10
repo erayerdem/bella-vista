@@ -1,6 +1,7 @@
 package com.bella.vista.bellavista.filter.entity;
 
 
+import com.bella.vista.bellavista.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,7 +20,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Filter {
+public class Filter extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "filter_generator")
     @SequenceGenerator(name = "filter_generator", sequenceName = "filter_seq",allocationSize = 1)

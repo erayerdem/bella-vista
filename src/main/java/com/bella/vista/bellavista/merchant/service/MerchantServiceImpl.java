@@ -48,7 +48,6 @@ public class MerchantServiceImpl implements MerchantService{
                         .name(merchantName)
                         .city(merchant.city())
                         .about(merchant.about())
-                        .createdDate(OffsetDateTime.now())
                         .build());
     }
 
@@ -88,6 +87,11 @@ public class MerchantServiceImpl implements MerchantService{
     public void deleteMerchantById(Long id) {
         var merchant = getById(id);
         merchantRepository.delete(merchant);
+    }
+
+    @Override
+    public Merchant fetchCoffeesOfMerchant(Long merchantId) {
+        return merchantRepository.findByIdFetchCoffees(merchantId).orElseThrow(() -> new RuntimeException("Merchant Not Found"));
     }
 
 }

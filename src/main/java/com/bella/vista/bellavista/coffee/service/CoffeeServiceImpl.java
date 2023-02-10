@@ -33,15 +33,18 @@ public class CoffeeServiceImpl implements CoffeeService{
 
 
     @Override
-    @Transactional
-    public Set<Coffee> getCoffeesOfMerchant(Long merchantId) {
-        Merchant merchant = merchantService.getById(merchantId);
-        return merchant.getCoffees();
+    public Merchant getCoffeesOfMerchant(Long merchantId) {
+        return merchantService.fetchCoffeesOfMerchant(merchantId);
     }
 
     @Override
     public void deleteById(Long id) {
         repo.deleteById(id);
+    }
+
+    @Override
+    public Coffee getById(Long id) {
+        return repo.findById(id).orElseThrow(() -> new RuntimeException("Coffee Not Found"));
     }
 
 }

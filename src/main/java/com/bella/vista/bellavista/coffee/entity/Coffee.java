@@ -1,6 +1,7 @@
 package com.bella.vista.bellavista.coffee.entity;
 
 import com.bella.vista.bellavista.common.dto.City;
+import com.bella.vista.bellavista.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,7 +17,7 @@ import org.hibernate.annotations.NaturalId;
 @Entity
 @Getter
 @Setter
-public class Coffee {
+public class Coffee extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)

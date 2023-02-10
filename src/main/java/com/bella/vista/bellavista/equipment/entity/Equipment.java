@@ -1,6 +1,7 @@
 package com.bella.vista.bellavista.equipment.entity;
 
 
+import com.bella.vista.bellavista.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,7 +20,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Equipment {
+public class Equipment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "equipment_generator")
     @SequenceGenerator(name = "equipment_generator", sequenceName = "equipment_seq",allocationSize = 1)

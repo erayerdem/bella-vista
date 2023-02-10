@@ -6,6 +6,7 @@ import com.bella.vista.bellavista.coffee.entity.Coffee;
 import com.bella.vista.bellavista.coffee.mapper.CoffeeMapper;
 import com.bella.vista.bellavista.coffee.service.CoffeeService;
 import com.bella.vista.bellavista.common.dto.BaseResponse;
+import com.bella.vista.bellavista.merchant.entity.Merchant;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +39,8 @@ public class CoffeeController {
     }
 
     @GetMapping("/merchants/{merchantId}")
-    public BaseResponse<Set<Coffee>> getCoffeesOfMerchant(@NotBlank @PathVariable Long merchantId){
-        return BaseResponse.<Set<Coffee>>builder().data(coffeeService.getCoffeesOfMerchant(merchantId)).build();
+    public BaseResponse<Merchant> getCoffeesOfMerchant(@NotBlank @PathVariable Long merchantId){
+        return BaseResponse.<Merchant>builder().data(coffeeService.getCoffeesOfMerchant(merchantId)).build();
     }
 
     @PostMapping("/merchants/{merchantId}")

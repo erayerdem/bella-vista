@@ -1,6 +1,7 @@
 package com.bella.vista.bellavista.water.entity;
 
 
+import com.bella.vista.bellavista.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,7 +20,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Water {
+public class Water extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "water_generator")
     @SequenceGenerator(name = "water_generator", sequenceName = "water_sequence",allocationSize = 1)

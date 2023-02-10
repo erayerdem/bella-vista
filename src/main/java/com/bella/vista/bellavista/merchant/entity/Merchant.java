@@ -2,6 +2,7 @@ package com.bella.vista.bellavista.merchant.entity;
 
 import com.bella.vista.bellavista.coffee.entity.Coffee;
 import com.bella.vista.bellavista.common.dto.City;
+import com.bella.vista.bellavista.common.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,7 +32,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @Table(name = "merchant")
-public class Merchant  {
+public class Merchant  extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
@@ -43,7 +44,6 @@ public class Merchant  {
 
     private String about;
 
-    private OffsetDateTime createdDate;
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "merchant_id")
     private Set<Coffee> coffees;

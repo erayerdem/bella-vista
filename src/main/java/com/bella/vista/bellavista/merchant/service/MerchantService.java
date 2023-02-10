@@ -29,4 +29,6 @@ public interface MerchantService {
     Optional<Merchant> findByName(String name);
 
     void deleteMerchantById(Long id);
+
+    Merchant fetchCoffeesOfMerchant(Long merchantId);
 }
