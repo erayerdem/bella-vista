@@ -10,15 +10,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.NaturalId;
 
 
 @Entity
 @Getter
 @Setter
-@DynamicInsert
 public class Coffee {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "coffee_sequence")
@@ -28,7 +25,6 @@ public class Coffee {
     @NaturalId
     private String fullName;
 
-    @ColumnDefault(value ="İstanbul")
     @Enumerated(EnumType.ORDINAL)
     private City country;
     private String  area;
