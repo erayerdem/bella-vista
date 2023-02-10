@@ -12,3 +12,6 @@ spring:
     default-property-inclusion: non_null
   jpa:
     open-in-view: false
+  flyway:
+    enabled: false
+    baseline-on-migrate: true

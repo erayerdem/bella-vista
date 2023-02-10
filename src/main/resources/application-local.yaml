@@ -5,6 +5,8 @@ spring:
     password: password
   jpa:
     hibernate:
-      ddl-auto: update
-
+      ddl-auto: create-drop
     show-sql: true
+  flyway:
+    init-sqls:
+      - drop table if exists flyway_schema_history

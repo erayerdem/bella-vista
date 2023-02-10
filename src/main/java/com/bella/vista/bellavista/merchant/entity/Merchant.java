@@ -33,7 +33,7 @@ import java.util.Set;
 @Table(name = "merchant")
 public class Merchant  {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "merchant_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Long id;
 

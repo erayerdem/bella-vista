@@ -1,0 +1,17 @@
+insert into water (name) values ('Uludağ');
+insert into water (name) values ('Nestle');
+insert into water (name) values ('Hayat');
+insert into water (name) values ('Munzur');
+insert into water (name) values ('Atlantis');
+insert into water (name) values ('Taşkesti');
+insert into water (name) values ('Buzdağı');
+insert into water (name) values ('Javsu');
+insert into water (name) values ('Tekir');
+insert into water (name) values ('Fuska');
+insert into water (name) values ('Beyyab');
+insert into water (name) values ('Sultan');
+insert into water (name) values ('Cansu');
+insert into water (name) values ('Damla');
+insert into water (name) values ('Erikli');
+insert into water (name) values ('Saka');
+insert into water (name) values ('Sırma');

@@ -18,7 +18,7 @@ import org.hibernate.annotations.NaturalId;
 @Setter
 public class Coffee {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "coffee_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Long id;
 
