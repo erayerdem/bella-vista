@@ -7,8 +7,9 @@ import com.bella.vista.bellavista.merchant.service.MerchantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import java.util.List;
 import java.util.Set;
 
 
@@ -20,31 +21,31 @@ public class CoffeeServiceImpl implements CoffeeService{
 
     private final MerchantService merchantService;
     @Override
-    public List<Coffee> getCoffees() {
+    public Flux<Coffee> getCoffees() {
       return repo.findAll();
     }
 
     @Override
     @Transactional
     public void saveCoffee(Set<Coffee> coffee, Long merchantId) {
-        Merchant merchant = merchantService.getById(merchantId);
-        merchant.putCoffee(coffee);
+         merchantService.getById(merchantId)
+                         .subscribe(merchant -> merchant.putCoffee(coffee));
     }
 
 
     @Override
-    public Merchant getCoffeesOfMerchant(Long merchantId) {
+    public Mono<Merchant> getCoffeesOfMerchant(Long merchantId) {
         return merchantService.fetchCoffeesOfMerchant(merchantId);
     }
 
     @Override
     public void deleteById(Long id) {
-        repo.deleteById(id);
+        repo.deleteById(id).subscribe();
     }
 
     @Override
-    public Coffee getById(Long id) {
-        return repo.findById(id).orElseThrow(() -> new RuntimeException("Coffee Not Found"));
+    public Mono<Coffee> getById(Long id) {
+        return repo.findById(id).switchIfEmpty(Mono.error(new RuntimeException("Coffee Not Found")));
     }
 
 }

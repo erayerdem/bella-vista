@@ -18,9 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -40,14 +41,19 @@ public class CoffeeController {
 
     @GetMapping("/merchants/{merchantId}")
     public BaseResponse<Merchant> getCoffeesOfMerchant(@NotBlank @PathVariable Long merchantId){
-        return BaseResponse.<Merchant>builder().data(coffeeService.getCoffeesOfMerchant(merchantId)).build();
+        coffeeService.getCoffeesOfMerchant(merchantId)
+                .map()
+        return BaseResponse.<Merchant>builder().data().build();
     }
 
     @PostMapping("/merchants/{merchantId}")
-    public BaseResponse<Void> setCoffee(@NotBlank @PathVariable Long merchantId, @NotEmpty @RequestBody List<CoffeeDto> coffees)  {
-        Set<Coffee> collect = coffees.stream().map(coffeeMapper::toEntity).collect(Collectors.toSet());
-        coffeeService.saveCoffee(collect,merchantId);
-        return BaseResponse.success();
+    public Mono<BaseResponse<Void>> setCoffee(@NotBlank @PathVariable Long merchantId, @NotEmpty @RequestBody Flux<CoffeeDto> coffees)  {
+        coffees
+                .map(coffeeMapper::toEntity)
+                .collect(Collectors.toSet())
+                .subscribe(coffee -> coffeeService.saveCoffee(coffee,merchantId));
+
+        return Mono.just(BaseResponse.success());
     }
 
     @DeleteMapping("/{id}")

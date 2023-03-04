@@ -2,8 +2,10 @@ package com.bella.vista.bellavista.receipt.repository;
 
 import com.bella.vista.bellavista.receipt.entity.Receipt;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Mono;
 
-public interface ReceiptRepository extends PagingAndSortingRepository<Receipt,Long> {
+public interface ReceiptRepository extends ReactiveCrudRepository<Receipt,Long> {
 
-    Receipt save(Receipt entity);
+    Mono<Receipt> save(Receipt entity);
 }

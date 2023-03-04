@@ -1,6 +1,7 @@
 package com.bella.vista.bellavista.merchant.service;
 
 import com.bella.vista.bellavista.coffee.entity.Coffee;
+import com.bella.vista.bellavista.coffee.repository.CoffeeRepository;
 import com.bella.vista.bellavista.merchant.dto.MerchantCreateRequestDto;
 import com.bella.vista.bellavista.merchant.dto.MerchantDto;
 import com.bella.vista.bellavista.merchant.entity.Merchant;
@@ -8,15 +9,10 @@ import com.bella.vista.bellavista.merchant.mapper.MerchantMapper;
 import com.bella.vista.bellavista.merchant.repository.MerchantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import java.time.OffsetDateTime;
-import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 
 @Service
@@ -25,24 +21,18 @@ public class MerchantServiceImpl implements MerchantService{
 
     private final MerchantRepository merchantRepository;
 
+    private final CoffeeRepository coffeeRepository;
+
     private final MerchantMapper mapper;
     @Override
-    public List<MerchantDto> getMerchants() {
-        var merchants = merchantRepository.findAll();
-        return  StreamSupport
-                .stream(merchants.spliterator(), false)
-                .map(mapper::toDto).collect(Collectors.toList());
+    public Flux<MerchantDto> getMerchants() {
+          return merchantRepository.findAll()
+                  .map(mapper::toDto);
     }
 
 
     @Override
-    public Optional<Merchant> getByİd(Long id) {
-        return merchantRepository.findById(id);
-    }
-
-
-    @Override
-    public Merchant saveMerchant(MerchantCreateRequestDto merchant,String merchantName) {
+    public Mono<Merchant> saveMerchant(MerchantCreateRequestDto merchant,String merchantName) {
         return merchantRepository.save(
                 Merchant.builder()
                         .name(merchantName)
@@ -52,16 +42,12 @@ public class MerchantServiceImpl implements MerchantService{
     }
 
     @Override
-    public List<Coffee> getCoffees() {
-      return  StreamSupport
-                .stream(merchantRepository.findAll().spliterator(), false)
-                .map(Merchant::getCoffees)
-                .filter(Objects::nonNull)
-                .flatMap(Collection::stream).toList();
+    public Flux<Coffee> getCoffees() {
+        return coffeeRepository.findAll();
     }
     @Override
-    public Merchant getById(Long merchantId) {
-        return merchantRepository.findById(merchantId).orElseThrow(() -> new RuntimeException("Merchant Not Found"));
+    public Mono<Merchant> getById(Long merchantId) {
+        return merchantRepository.findById(merchantId).switchIfEmpty(Mono.error(new RuntimeException("Merchant Not Found")));
     }
 
 
@@ -73,13 +59,16 @@ public class MerchantServiceImpl implements MerchantService{
 
 
     @Override
-    public Set<Coffee> getCoffeesOfMerchant(Long merchantId) {
-        return getById(merchantId).getCoffees();
+    public Flux<Coffee> getCoffeesOfMerchant(Long merchantId) {
+         getById(merchantId)
+                .map(e->Flux.just(e.getCoffees()));
+
+
 
     }
 
     @Override
-    public Optional<Merchant> findByName(String name) {
+    public Mono<Merchant> findByName(String name) {
         return merchantRepository.findByNameIgnoreCase(name);
     }
 
@@ -90,8 +79,8 @@ public class MerchantServiceImpl implements MerchantService{
     }
 
     @Override
-    public Merchant fetchCoffeesOfMerchant(Long merchantId) {
-        return merchantRepository.findByIdFetchCoffees(merchantId).orElseThrow(() -> new RuntimeException("Merchant Not Found"));
+    public Flux<Merchant> fetchCoffeesOfMerchant(Long merchantId) {
+        return merchantRepository.findByIdFetchCoffees(merchantId).switchIfEmpty(Mono.error(new RuntimeException("Ana sikem")));
     }
 
 }

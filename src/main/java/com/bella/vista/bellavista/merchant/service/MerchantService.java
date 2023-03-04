@@ -4,31 +4,27 @@ import com.bella.vista.bellavista.coffee.entity.Coffee;
 import com.bella.vista.bellavista.merchant.dto.MerchantCreateRequestDto;
 import com.bella.vista.bellavista.merchant.dto.MerchantDto;
 import com.bella.vista.bellavista.merchant.entity.Merchant;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 public interface MerchantService {
 
-    List<MerchantDto> getMerchants();
+    Flux<MerchantDto> getMerchants();
 
 
-    Optional<Merchant> getByİd(Long id);
+    Mono<Merchant> saveMerchant(MerchantCreateRequestDto merchant, String merchantName);
 
-    Merchant saveMerchant(MerchantCreateRequestDto merchant, String merchantName);
-
-    List <Coffee> getCoffees();
-
-    Merchant getById(Long merchantId);
+    Flux <Coffee> getCoffees();
 
     void saveCoffee(List<Coffee> coffee, Merchant merchantId);
 
-    Set<Coffee> getCoffeesOfMerchant(Long merchantId);
+    Flux<Coffee> getCoffeesOfMerchant(Long merchantId);
 
-    Optional<Merchant> findByName(String name);
+    Mono<Merchant> findByName(String name);
 
     void deleteMerchantById(Long id);
 
-    Merchant fetchCoffeesOfMerchant(Long merchantId);
+    Flux<Merchant> fetchCoffeesOfMerchant(Long merchantId);
 }

@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -30,12 +32,12 @@ public class ReceiptServiceImpl implements ReceiptService{
     private final EquipmentService equipmentService;
 
     @Override
-    public List<Receipt> receipts(Integer page, Integer size, String property, String... properties) {
+    public Flux<Receipt> receipts(Integer page, Integer size, String property, String... properties) {
         return repository.findAll(PageRequest.of(page,size,Sort.Direction.DESC,"id")).toList();
     }
 
     @Override
-    public Receipt createReceipt(ReceiptCreateDto dto) {
+    public Mono<Receipt> createReceipt(ReceiptCreateDto dto) {
         Coffee coffee = coffeeService.getById(dto.coffeeId());
         Filter filter = filterService.getById(dto.filterId());
         Equipment equipment = equipmentService.getById(dto.equipmentId());

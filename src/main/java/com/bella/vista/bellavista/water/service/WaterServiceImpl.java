@@ -5,8 +5,10 @@ import com.bella.vista.bellavista.water.entity.Water;
 import com.bella.vista.bellavista.water.repository.WaterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -16,24 +18,25 @@ public class WaterServiceImpl implements WaterService {
 
     private final WaterRepository waterRepository;
     @Override
-    public List<Water> getWaters() {
+    public Flux<Water> getWaters() {
         return waterRepository.findAll();
     }
 
     @Override
-    public Water addWater(WaterRequestDto req) {
+    public Mono<Water> addWater(WaterRequestDto req) {
         var water = Water.builder().name(req.name()).build();
         return waterRepository.save(water);
     }
 
     @Override
     public void deleteWater(Long id) {
-        Water entity = this.getById(id);
-        waterRepository.delete(entity);
+        Mono<Water> entity = this.getById(id);
+        waterRepository.delete(Objects.requireNonNull(entity.block()));
     }
 
     @Override
-    public Water getById(Long id) {
-        return waterRepository.findById(id).orElseThrow(() -> new RuntimeException("Water Not Found"));
+    public Mono<Water> getById(Long id) {
+        return waterRepository.findById(id)
+                .switchIfEmpty(Mono.error(new RuntimeException("Water Not Found")));
     }
 }

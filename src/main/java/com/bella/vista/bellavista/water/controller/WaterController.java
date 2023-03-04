@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("waters")
@@ -23,14 +23,14 @@ public class WaterController {
 
     private  final WaterService waterService;
     @GetMapping
-    public BaseResponse<List<Water>> getWaters(){
-        var waters = waterService.getWaters();
-        return BaseResponse.<List<Water>>builder().data(waters).build();
+    public Flux<BaseResponse<Water>> getWaters(){
+        return waterService.getWaters()
+                .map(r -> BaseResponse.<Water>builder().data(r).build());
     }
 
     @PostMapping
-    public BaseResponse<Water> addWater(@RequestBody WaterRequestDto req){
-            return BaseResponse.<Water>builder().data(waterService.addWater(req)).build();
+    public BaseResponse<Mono<Water>> addWater(@RequestBody WaterRequestDto req){
+            return BaseResponse.<Mono<Water>>builder().data(waterService.addWater(req)).build();
     }
 
     @DeleteMapping("{id}")
@@ -40,8 +40,8 @@ public class WaterController {
     }
 
     @GetMapping("{id}")
-    public BaseResponse<Water> getWater(@PathVariable Long id) {
+    public BaseResponse<Mono<Water>> getWater(@PathVariable Long id) {
         var water = waterService.getById(id);
-        return BaseResponse.<Water>builder().data(water).build();
+        return BaseResponse.<Mono<Water>>builder().data(water).build();
     }
 }
